@@ -1,4 +1,4 @@
-# Sql scanner
+# SQL scanner
 
 A tool that uses public proxies to find and scan sites for sql injection vulnerability<br>
 
