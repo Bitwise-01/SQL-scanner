@@ -55,8 +55,8 @@ class SQL(object):
                 sleep(1.5)
                 continue
 
-            if not self.search.is_alive and not self.search.links.qsize():
-                break
+            if not self.search.links.qsize():
+                continue
 
             browsers = []
             for link in self.links:

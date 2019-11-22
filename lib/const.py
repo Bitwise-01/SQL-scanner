@@ -9,7 +9,7 @@ max_active_browsers = 256
 
 # Misc
 debug = False
-version = '1.0'
+version = '1.0.1'
 sql_log = 'sql_vuln.txt'
 
 # Art
