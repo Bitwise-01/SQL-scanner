@@ -17,9 +17,8 @@ class Browser(object):
         self.is_attempted = False
 
     def get_content(self):
-        url = self.link + '\''
         try:
-            return requests.get(url).text
+            return requests.get(self.link + '*').text.lower()
         except:
             pass
 
@@ -30,7 +29,7 @@ class Browser(object):
         if content:
             self.is_attempted = True
 
-            if 'Invalid SQL' in content or 'error' in content:
+            if 'sql' in content and 'error' in content and 'at line' in content:
                 self.is_vulner = True
 
         self.is_active = False

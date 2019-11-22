@@ -33,11 +33,10 @@ class SQL(object):
 
         while self.is_alive:
 
-            if not self.search.is_alive and not self.search.links.qsize():
+            if not self.search.is_active():
                 break
             else:
                 link = self.search.get_link()
-
                 if link:
                     with self.lock:
                         self.links.append(link)
@@ -48,7 +47,6 @@ class SQL(object):
             self.is_alive = False
 
     def link_manager(self):
-        # bots_per_proxy = 0
         is_started = False
 
         while self.is_alive:
@@ -62,18 +60,9 @@ class SQL(object):
 
             browsers = []
             for link in self.links:
-                # if not self.proxy or bots_per_proxy >= max_bots_per_proxy:
-                    # self.proxy = self.proxy_manager.get_proxy()
-                    # bots_per_proxy = 0
-
-                # if not self.proxy:
-                #     sleep(1.5)
-                #     continue
 
                 if not link in self.active_links and len(self.active_links) < max_active_browsers:
-                    # bots_per_proxy += 1
                     self.active_links.append(link)
-                    # browser = Browser(link, self.proxy)
                     browser = Browser(link)
                     browsers.append(browser)
                     self.browsers.append(browser)
@@ -113,9 +102,6 @@ class SQL(object):
                         else:
                             self.display.is_not_vulner(browser.link)
 
-                    # else:
-                        # self.proxy_manager.bad_proxy(browser.proxy)
-
                     with self.lock:
                         self.active_links.remove(browser.link)
                         self.browsers.remove(browser)
@@ -144,11 +130,6 @@ class SQL(object):
         search_manager.daemon = True
         search_manager.start()
 
-        # self.display.info('Searching for proxies ...')
-        # proxy_manager = Thread(target=self.proxy_manager.start)
-        # proxy_manager.daemon = True
-        # proxy_manager.start()
-
         self.browser_manager()
 
     def stop(self):
@@ -156,5 +137,4 @@ class SQL(object):
             self.search.stop()
 
         self.is_alive = False
-        # self.proxy_manager.stop()
         self.display.shutdown(self.total_found)
